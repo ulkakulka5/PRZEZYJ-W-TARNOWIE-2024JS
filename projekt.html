@@ -47,7 +47,7 @@
         }
             
 
-        #btnContainer {
+        #btn {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -55,22 +55,25 @@
     margin-top: 20px;
 }
 
-#btnContainer button {
+#btn button {
+    font-family: Georgia, serif;
     padding: 10px 15px;
     font-size: 16px;
     cursor: pointer;
     background-color: #684627;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    color: beige;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
-#btnContainer button:hover {
+#btn button:hover {
     background-color: #684627;
 }
 
 @media (max-width: 800px) {
-    #btnContainer button {
+    #btn button {
         flex-basis: 45%; 
     }
 }
