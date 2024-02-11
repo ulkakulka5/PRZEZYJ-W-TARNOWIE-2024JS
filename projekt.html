@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przeżyj w Tarnowie♡</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Georgia, serif;
+            background-color: #FFDA98;
+            color: #423620;
+        }
+        #statystykiContainer {
+             display: none;
+             position: fixed;
+            top: 10px;
+            left: 10px;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            color: #423620;
+            }
+         
+
+        #startButton {
+            margin-top: 20px;
+        }
+
+        #formularzContainer {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #obrazContainer {
+            display: none;
+            margin-top: 20px;
+        }
+            
+
+        #btnContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#btnContainer button {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #684627;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#btnContainer button:hover {
+    background-color: #684627;
+}
+
+@media (max-width: 800px) {
+    #btnContainer button {
+        flex-basis: 45%; 
+    }
+}
+
+
+
+        #startGif {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        #wiekdiv {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        #wiekValue {
+            margin-right: 10px;
+        }
+
+        #wiekImage {
+            max-width: 30px;
+            height: auto;
+        }
+
+        #error-message {
+            color: rgb(116, 12, 12);
+            margin-top: 10px;
+        }
+
+        #obraz {
+            width: 900px;
+            height: 650px;
+            padding-top: 75px;
+            padding-left: 75px;
+            padding-right: 75px;
+            padding-bottom: 35px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        #tekst1 {
+            text-align: center;
+        }
+
+        #btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .white {
+        color: white;
+        font-size: larger;
+        font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <h1>Przeżyj w Tarnowie♡ </h1>
+    <div id="statystykiContainer" class="ukryte" position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; align-items: flex-start;">
+        <div>
+            <img src="pieniadze.png" alt="Pieniądze" style="width: 20px; height: 20px; margin-right: 5px;">
+            <span id="wartoscPieniadze">100</span>
+        </div>
+        <div>
+            <img src="glod.png" alt="Głód" style="width: 20px; height: 20px; margin-right: 5px;">
+            <span id="wartoscGlodu">50%</span>
+        </div>
+        <div>
+            <img src="zdrowie.png" alt="zdrowie" style="width: 20px; height: 20px; margin-right: 5px;">
+            <span id="wartoscZdrowie">50%</span>
+        </div>
+        <div>
+            
+            <img src="zegar.png" alt="zegar" style="width: 20px; height: 20px; margin-right: 5px;">
+        <span id="wartoscGodziny"></span>
+    </div>
+        
+    </div>
+    <div id="startButtonContainer">
+        <img id="startGif" src="gif.gif" alt="animacja">
+        <button id='zacznijmy' onclick="rozpocznijGre()">Zacznijmy</button>
+    </div>
+    <div id="formularzContainer">
+        <form id="graFormularz">
+            <label for="nick">Imię (nick):</label>
+            <input type="text" id="nick" required>
+            <br>
+            <label for="wiek">Wiek:</label>
+            <div id="wiekdiv">
+                <span id="wiekValue">10</span>
+                <img id="wiekImage" src="baby.png" alt="Bobas">
+            </div>
+            <input type="range" id="wiek" min="0" max="100" value="10" oninput="wiekf()">
+
+            <br>
+            <label>Płeć:</label>
+            <div id="plecButtons">
+                <label for="mezczyzna">M</label>
+                <input type="radio" id="mezczyzna" name="plec" value="mezczyzna" checked>
+                <label for="kobieta">K</label>
+                <input type="radio" id="kobieta" name="plec" value="kobieta">
+            </div>
+            <br>
+            <button type="button" onclick="pokazObraz()" id="wyslijButton">Wyślij</button>
+            <div id="error-message" class="error-message"></div>
+        </form>
+    </div>
+
+    <div id="obrazContainer">
+        <h2 id="tekst2">Witaj na dworcu</h2>
+        <div id="tekst1"></div>
+        <img src="dworzec.jpg" alt="dworzec" id="obraz">
+        <br>
+        <div id="btn">
+
+        </div>
+    </div>
+
+    <div id="wynikContainer">
+        <p id="wynikTekst"></p>
+    </div>
+
+    <script>
+        var mezczyznaInput=document.getElementById('mezczyzna');  
+        var obraz = document.getElementById('obraz');
+        var tekst1 = document.getElementById('tekst1');
+        var tekst2 = document.getElementById('tekst2');
+        var btnContainer = document.getElementById('btn');
+        var gif = document.getElementById('startGif');
+        var nickInput = document.getElementById('nick');
+        var errorMessage = document.getElementById('error-message');
+        var formularzContainer = document.getElementById('formularzContainer');
+        var obrazContainer = document.getElementById('obrazContainer');
+        
+
+        var statystyki = {
+             pieniadze: 0,
+            glod: 0,
+            zdrowie: 0,
+            godzina: 9,
+            minuta: 0
+        };
+
+
+    function dodajPieniadze(kwota) {
+    statystyki.pieniadze += kwota;
+    aktualizujStanGry();
+    }
+    function dodajZdrowie(liczba) {
+    statystyki.zdrowie += liczba;
+    if (statystyki.zdrowie > 100) {
+        statystyki.zdrowie = 100;
+    }
+    if (statystyki.zdrowie <0) {
+        statystyki.zdrowie = 0;
+    }
+    aktualizujStanGry();
+    }
+    function dodajglod(liczba) {
+    statystyki.glod += liczba;
+    if (statystyki.glod > 100) {
+        statystyki.glod = 100;
+        if (statystyki.glod <0) {
+        statystyki.glod = 0;
+
+    if(statystyki.glod==0){
+        setTimeout(function(){
+            statystyki.zdrowie-=1;
+        },5000)
+    }
+    }
+    aktualizujStanGry();
+    }}
+    function dodajCzas(minuty) {
+    if(minuty>15){
+        var _=minuty/15;
+        for (var i = _; i > 0; i--) {
+    dodajglod(-1);
+    aktualizujStanGry();
+}}
+    statystyki.minuta += minuty;
+    console.log(statystyki.minuta);
+    console.log(statystyki.godzina);
+    while (statystyki.minuta >= 59) {
+        statystyki.godzina++;
+        statystyki.minuta -= 60;
+        aktualizujStanGry();
+    }
+}
+    function aktualizujStanGry() {
+    document.getElementById('wartoscPieniadze').innerText = statystyki.pieniadze + 'zł';
+    document.getElementById('wartoscGlodu').innerText = statystyki.glod + '%';
+    document.getElementById('wartoscZdrowie').innerText = statystyki.zdrowie + '%';
+    document.getElementById('wartoscGodziny').innerText = formatujGodzine(statystyki.godzina, statystyki.minuta);
+    sprawdzGodzineWygranej();
+    aktualizujMigajaceWartosci();
+    if(statystyki.zdrowie==0){
+        przegrales();
+    }
+    if(statystyki.pieniadze<=0){
+        console.log("ksajkdjk");
+        przegralesk();
+    }
+}
+
+var stopMiganie = false; // zmienna kontrolująca miganie
+
+function aktualizujMigajaceWartosci() {
+    aktualizujMigajacaWartosc('wartoscGlodu', statystyki.glod);
+    aktualizujMigajacaWartosc('wartoscZdrowie', statystyki.zdrowie);
+}
+
+function aktualizujMigajacaWartosc(idElementu, wartosc) {
+    var element = document.getElementById(idElementu);
+
+    if (wartosc <= 10 && !stopMiganie) {
+        migajNaCzerwono(element);
+    } else {
+        element.style.color = '#423620';
+    }
+
+    element.innerText = wartosc + " %";
+}
+
+function migajNaCzerwono(element) {
+    var isRed = false;
+
+    function zmienKolor() {
+        if (stopMiganie) return; 
+        element.style.color = isRed ? 'red' : '#423620';
+
+        setTimeout(zmienKolor, 500);
+    }
+
+    zmienKolor();
+}
+
+function zatrzymajMiganie() {
+    stopMiganie = true;
+}
+
+
+function sprawdzGodzineWygranej() {
+    if (statystyki.godzina >= 23) {
+        wygrales(); 
+    }}
+
+
+
+function formatujGodzine(godzina, minuta) {
+    return godzina.toString().padStart(2, '0') + ':' + minuta.toString().padStart(2, '0');
+}
+
+   
+
+  
+  
+function rozpocznijGre() {
+    gif.style.display = 'block';
+
+    setTimeout(function () {
+        gif.style.display = 'none';
+
+        var zasadyGry = document.createElement('div');
+        document.getElementById('zacznijmy').style.display = 'none';
+
+        var naglowek1 = document.createElement('div');
+        naglowek1.textContent = 'ZASADY GRY:';
+        naglowek1.style.fontWeight = 'bold';
+        naglowek1.style.textAlign = 'center';
+        document.getElementById('startButtonContainer').appendChild(naglowek1);
+
+        var trescZasad1 = document.createElement('div');
+        trescZasad1.textContent = '1) Główną (i w sumie jedyną zasadą) jest po prostu przeżycie w Tarnowie, baw się, testuj, próbuj (często szeroka fabuła mimo błędnych odpowiedzi)';
+        trescZasad1.style.textAlign = 'center';
+        document.getElementById('startButtonContainer').appendChild(trescZasad1);
+
+        var trescZasad2 = document.createElement('div');
+        trescZasad2.textContent = '2) Uważaj na parametry zdrowia i pieniędzy, ponieważ mogą zakończyć twoją rozgrywkę';
+        trescZasad2.style.textAlign = 'center';
+        document.getElementById('startButtonContainer').appendChild(trescZasad2);
+
+        var naglowek2 = document.createElement('div');
+        naglowek2.textContent = 'MIŁEJ ZABAWY';
+        naglowek2.style.fontWeight = 'bold';
+        naglowek2.style.textAlign = 'center';
+        document.getElementById('startButtonContainer').appendChild(naglowek2);
+
+        setTimeout(function () {
+            zasadyGry.style.display = 'none';
+            document.getElementById('startButtonContainer').style.display = 'none';
+            document.getElementById('formularzContainer').style.display = 'flex';
+        }, 6000);
+    }, 2000);
+}
+         
+        function pokazObraz() {
+        zatrzymajMiganie();
+    var wiekInput = document.getElementById('wiek');
+    var wiekValue = wiekInput.value;
+
+    if (wiekValue < 20) {
+        statystyki.pieniadze = 100;
+        statystyki.glod = 50;
+        statystyki.zdrowie = 100;
+        aktualizujStanGry();
+    }
+    if (wiekValue < 50 &&  wiekValue > 20) {
+        statystyki.pieniadze = 400;
+        statystyki.glod = 50;
+        statystyki.zdrowie = 70;
+        aktualizujStanGry();
+    }
+    if (wiekValue <= 100 && wiekValue > 50) {
+        statystyki.pieniadze = 2000;
+        statystyki.glod = 50;
+        statystyki.zdrowie = 50;
+        aktualizujStanGry();
+    }
+
+
+  
+    aktualizujStanGry();
+  document.getElementById('statystykiContainer').style.display = 'flex';
+  
+
+    tekst2.innerText = 'Witaj na dworcu';
+    btnContainer.innerHTML = '<button onclick=\"przycisk1(\'dalej\')\">dalej</button>';
+
+    obraz.src = 'dworzec.jpg';
+    if (mezczyznaInput.checked) {
+        tekst1.innerText = 'Wysiadłeś bezpiecznie z pociągu, jest cudny, słoneczny dzień, co może pójść nie tak?';
+    } else {
+        tekst1.innerText = 'Wysiadłaś bezpiecznie z pociągu, jest cudny, słoneczny dzień, co może pójść nie tak?';
+    }
+
+    if (nickInput.value === '') {
+        errorMessage.innerText = 'Proszę podać imię.';
+        return;
+    }
+
+    errorMessage.innerText = '';
+    formularzContainer.style.display = 'none';
+    obrazContainer.style.display = 'block';
+}
+
+        function przycisk1(dalej) {
+            
+            dodajCzas(20);
+            aktualizujStanGry();
+            
+            tekst2.innerText ='Malownicze planty';
+            obraz.src = 'planty.jpg';
+            if (mezczyznaInput.checked) {
+                tekst1.innerText = 'Dotarłeś na planty, co za niesamowity park Tarnowski. Ten Tarnów jest piękny, ale czy aby na pewno?';
+            } else {
+                tekst1.innerText = 'Dotarłaś na planty, co za niesamowity park Tarnowski. Ten Tarnów jest piękny, ale czy aby na pewno?';
+            }
+
+            btnContainer.style.display = 'none'; //chowa przycisk1
+  
+
+            // po 4 sekundach
+            setTimeout(function () {
+                obraz.src = 'planty2.jpg';
+                tekst1.innerText = 'Wybierz mądrze...';
+                btnContainer.innerHTML = '<button onclick=\"przyciskUnia()\">Unia</button><button onclick=\"przyciskTarnovia()\">Tarnovia</button>';
+                btnContainer.style.display = 'flex'; // Pokaż przyciski Unia i Tarnovia
+            }, 4000);
+        }
+
+        function przyciskTarnovia() {
+            dodajCzas(20);
+    btnContainer.style.display = 'none';
+    obraz.src = "przystanek1.jpg";
+    tekst2.innerText = 'Przystanek-Planty';
+    if (mezczyznaInput.checked) {
+        tekst1.innerText = 'Planty to tereny Tarnovi, uszłeś z życiem i prawie dotarłeś na przystanek...';
+    } else {
+        tekst1.innerText = 'Planty to tereny Tarnovi, uszłaś z życiem i prawie dotarłaś na przystanek...';
+    }
+
+    setTimeout(function () {
+        obraz.src = "przystanek2.jpg";
+        tekst1.innerText = 'Podeszła do ciebie grupka nastolatków:';
+        setTimeout(function () {
+            tekst1.innerHTML = '<span class="white">Siema, jak się nazywasz?</span>';
+            var nickValue = nickInput.value;
+            btnContainer.innerHTML = '<button onclick="nick()"> ' + nickValue + ' </button><button onclick="inneimie()">Podaj inne imię</button>';
+            btnContainer.style.display = 'flex';
+
+        }, 3000);
+
+    }, 5000);
+}
+
+var x=0;
+var y=0;
+
+
+function nick() {
+    dodajCzas(20);
+    aktualizujStanGry();
+    var wiekInput= document.getElementById('wiek');
+        var wiekValue = wiekInput.value; 
+    btnContainer.style.display = 'none';
+    var nickValue = nickInput.value;
+    var nickDiv = document.createElement('div');
+    nickDiv.style.color = 'green';
+    nickDiv.style.textAlign = 'right';
+    nickDiv.style.fontWeight = 'bold';
+    nickDiv.style.marginRight = '40%'; 
+    nickDiv.textContent = 'hej, ' + nickValue;
+    tekst1.appendChild(nickDiv);
+
+    setTimeout(function () {
+        var pytanieWiek = document.createElement('div');
+        pytanieWiek.innerHTML = '<span class="white">O spoko, a ile masz lat?</span>';
+        pytanieWiek.style.fontWeight = 'bold';
+        pytanieWiek.style.textAlign = 'center';
+        tekst1.appendChild(pytanieWiek);
+
+       
+
+        btnContainer.innerHTML = '<button onclick="wiek()"> ' + wiekValue + ' </button><button onclick="innywiek()">Podaj inny wiek</button>';
+        btnContainer.style.display = 'flex';
+    }, 1000);
+
+
+}
+
+
+
+
+function inneimie() {
+    x=1;
+    dodajCzas(20);
+    aktualizujStanGry();
+    var wiekInput= document.getElementById('wiek');
+        var wiekValue = wiekInput.value; 
+    btnContainer.style.display = 'none';
+    var nickDiv = document.createElement('div');
+    nickDiv.style.color = 'green';
+    nickDiv.style.textAlign = 'right';
+    nickDiv.style.fontWeight = 'bold';
+    nickDiv.style.marginRight = '40%';
+
+    var mezczyznaImiona = ["Eugeniusz", "Kordian", "Eustachy", "Edward", "Ambroży", "Łukasz"];
+    var kobietaImiona = ["Barbara", "Stanisława", "Karolina", "Dominika", "Diana", "Zofia"];
+
+    var losoweImie;
+    if (mezczyznaInput.checked) {
+        losoweImie = mezczyznaImiona[Math.floor(Math.random() * mezczyznaImiona.length)];
+    } else {
+        losoweImie = kobietaImiona[Math.floor(Math.random() * kobietaImiona.length)];
+    }
+    y=losoweImie;
+    nickDiv.textContent = 'hej, ' + losoweImie;
+    tekst1.appendChild(nickDiv);
+
+    setTimeout(function () {
+        var pytanieWiek = document.createElement('div');
+        pytanieWiek.innerHTML = '<span class="white">O spoko, a ile masz lat?</span>';
+        pytanieWiek.style.fontWeight = 'bold';
+        pytanieWiek.style.textAlign = 'center';
+        tekst1.appendChild(pytanieWiek);
+
+       
+
+        btnContainer.innerHTML = '<button onclick="wiek()"> ' + wiekValue + ' </button><button onclick="innywiek()">Podaj inny wiek</button>';
+        btnContainer.style.display = 'flex';
+    }, 1000);
+}
+
+
+
+function wiek() {
+    dodajCzas(20);
+    aktualizujStanGry();
+    var wiekInput= document.getElementById('wiek');
+    var wiekValue = wiekInput.value; 
+    btnContainer.style.display = 'none';
+    var wiekkDiv = document.createElement('div');
+    wiekkDiv.style.color = 'green';
+    wiekkDiv.style.textAlign = 'right';
+    wiekkDiv.style.fontWeight = 'bold';
+    wiekkDiv.style.marginRight = '40%';
+    wiekkDiv.textContent = wiekValue; 
+    tekst1.appendChild(wiekkDiv);
+
+    if (wiekValue>17)
+            {
+                var pytanie = document.createElement('div');
+                if(mezczyznaInput.checked) {
+                    pytanie.innerHTML = '<span class="white">Kupiłbyś nam %?????</span>';
+                } else {
+                    pytanie.innerHTML = '<span class="white">Kupiłabyś nam %?????</span>';
+                 }
+    
+                pytanie.style.fontWeight = 'bold';
+                pytanie.style.textAlign = 'center';
+                tekst1.appendChild(pytanie);
+
+                btnContainer.innerHTML = '<button onclick="tak()"> Spoko </button><button onclick="nie()">Nie</button>';
+                 btnContainer.style.display = 'flex';
+            }
+            else{
+                var koniec = document.createElement('div');
+                koniec.innerHTML = '<span class="white">A to trudno, miłego dnia!</span>';
+                koniec.style.fontWeight = 'bold';
+                koniec.style.textAlign = 'center';
+                tekst1.appendChild(koniec);
+                setTimeout(function(){
+                    dodajCzas(5);
+                    aktualizujStanGry();
+                    obraz.src="przystanek.jpg";
+                    if(mezczyznaInput.checked){
+                       tekst1.innerText="Dotarłeś bezpiecznie na przystanek" ;
+                    }else{
+                        tekst1.innerText="Dotarłaś bezpiecznie na przystanek" ;
+                    }
+                    tekst2.innerText="Przystanek" ;
+                },1500)
+
+                setTimeout(function () {
+    tekst1.innerText = "Chcesz dojechać na RYNEK (bez konieczności daleko dochodzić), w jaki autobus wsiadasz?";
+
+    btnContainer.innerHTML = '<button onclick="wyborAutobusu33()">33</button><button onclick="wyborAutobusu33()">14</button><button onclick="wyborAutobusuA27()">A27</button><button onclick="wyborAutobusu9()">9</button>';
+
+    btnContainer.style.display = 'flex';
+}, 1500);
+            }
+        }
+
+    
+
+    function innywiek() {
+        dodajCzas(20);
+        aktualizujStanGry();
+            var fakewiek = prompt("Jaki wiek chcesz im podać?:", "17");
+            btnContainer.style.display = 'none';
+            var wiekkDiv = document.createElement('div');
+            wiekkDiv.style.color = 'green';
+            wiekkDiv.style.textAlign = 'right';
+            wiekkDiv.style.fontWeight = 'bold';
+            wiekkDiv.style.marginRight = '40%';
+            wiekkDiv.textContent = fakewiek;
+            tekst1.appendChild(wiekkDiv);
+        
+            if (fakewiek>17)
+            {
+                var pytanie = document.createElement('div');
+                if(mezczyznaInput.checked) {
+                    pytanie.innerHTML = '<span class="white">Kupiłbyś nam %?????</span>';
+                } else {
+                    pytanie.innerHTML = '<span class="white">Kupiłabyś nam %?????</span>';
+                 }
+    
+                pytanie.style.fontWeight = 'bold';
+                pytanie.style.textAlign = 'center';
+                tekst1.appendChild(pytanie);
+
+                btnContainer.innerHTML = '<button onclick="tak()"> Spoko </button><button onclick="nie()">Nie</button>';
+                 btnContainer.style.display = 'flex';
+            }
+            else{
+                var koniec = document.createElement('div');
+                koniec.innerHTML = '<span class="white">A to trudno, miłego dnia!</span>';
+                koniec.style.fontWeight = 'bold';
+                koniec.style.textAlign = 'center';
+                tekst1.appendChild(koniec);
+                setTimeout(function(){
+                    dodajCzas(5);
+                    aktualizujStanGry();
+                    obraz.src="przystanek.jpg";
+                    if(mezczyznaInput.checked){
+                       tekst1.innerText="Dotarłeś bezpiecznie na przystanek" ;
+                    }else{
+                        tekst1.innerText="Dotarłaś bezpiecznie na przystanek" ;
+                    }
+                    tekst2.innerText="Przystanek" ;
+                },1500)
+
+                setTimeout(function () {
+    tekst1.innerText = "Chcesz dojechać na RYNEK (bez konieczności daleko dochodzić), w jaki autobus wsiadasz?";
+
+    btnContainer.innerHTML = '<button onclick="wyborAutobusu33()">33</button><button onclick="wyborAutobusu33()">14</button><button onclick="wyborAutobusuA27()">A27</button><button onclick="wyborAutobusu9()">9</button>';
+
+    btnContainer.style.display = 'flex';
+}, 1500);
+                
+            }
+ 
+
+}
+           function wyborAutobusu33() {
+            dodajCzas(65);
+            dodajPieniadze(-3);
+            aktualizujStanGry();
+    btnContainer.style.display = 'none';
+    obraz.src = "zielone.jpg";
+    tekst2.innerText = "Osiedle Zielone";
+    if (mezczyznaInput.checked) {
+        tekst1.innerText = "O nie! Nie trafiłeś!";
+    } else {
+        tekst1.innerText = "O nie! Nie trafiłaś!";
+    }
+    setTimeout(function(){
+        dodajCzas(45);
+        aktualizujStanGry;
+        obraz.src="auchan.jpg";
+        tekst2.innerText = "Centrum handlowe ECHO";
+    if (mezczyznaInput.checked) {
+        tekst1.innerText = "Po krótkim spacerze dotarłeś pod hipermarket, chcesz wejść?";
+    } else {
+        tekst1.innerText = "Po krótkim spacerze dotarłaś pod hipermarket, chcesz wejść?";
+    }
+    btnContainer.innerHTML = '<button onclick="wejsc()">Tak</button><button onclick="niewejsc()">nie</button>';
+    btnContainer.style.display = 'flex';
+    },3000)
+}
+function wejsc(){
+    btnContainer.style.display='none';
+    dodajCzas(15);
+    aktualizujStanGry();
+    obraz.src = "sklep.png";
+    tekst2.innerText = "Sklep";
+    tekst1.innerText = "Zastanów się co chcesz kupić."
+    
+    btnContainer.innerHTML='<button onclick="hotdog()">hot dog 20 zł</button><button onclick="chleb()">chleb 5 zł</button><button onclick="sokJablkowy()">sok jabłkowy 9 zł</button><button onclick="spaghetti()">spaghetti 50 zł</button> <button onclick="zelki()">zelki 14 zł</button></br><button onclick="banany()">banany 10 zł</button> <button onclick="energetyk()">energetyk 19 zł</button> <button onclick="hamburger()">hamburger 52 zł</button> <button onclick="bubbletea()">bubble tea 37 zł</button></br><button onclick="wychodze()">wychodze</button>';
+    btnContainer.style.display='flex';
+    
+}
+
+function hotdog() {
+            dodajCzas(15);
+            dodajPieniadze(-20);
+            dodajglod(20);
+            dodajZdrowie(-10);
+            aktualizujStanGry();
+        }
+
+        function chleb() {
+            dodajCzas(15);
+            dodajPieniadze(-5);
+            dodajglod(13);
+            dodajZdrowie(2);
+            aktualizujStanGry();
+        }
+
+        function sokJablkowy() {
+            dodajCzas(5);
+            dodajPieniadze(-9);
+            dodajglod(11);
+            dodajZdrowie(3);
+            aktualizujStanGry();
+        }
+
+        function spaghetti() {
+            dodajCzas(30);
+            dodajPieniadze(-50);
+            dodajglod(40);
+            dodajZdrowie(5);
+            aktualizujStanGry();
+        }
+
+        function zelki() {
+            dodajCzas(6);
+            dodajPieniadze(-14);
+            dodajglod(9);
+            dodajZdrowie(-20);
+            aktualizujStanGry();
+        }
+
+        function banany() {
+            dodajCzas(5);
+            dodajPieniadze(-10);
+            dodajglod(17);
+            dodajZdrowie(4);
+            aktualizujStanGry();
+        }
+
+        function energetyk() {
+            dodajCzas(5);
+            dodajPieniadze(-19);
+            dodajglod(1);
+            dodajZdrowie(-25);
+            aktualizujStanGry();
+        }
+
+        function hamburger() {
+            dodajCzas(30);
+            dodajPieniadze(-52);
+            dodajglod(30);
+            dodajZdrowie(-10);
+            aktualizujStanGry();
+        }
+
+        function bubbletea() {
+            dodajCzas(15);
+            dodajPieniadze(-37);
+            dodajglod(10);
+            dodajZdrowie(-10);
+            aktualizujStanGry();
+        }
+
+        function wychodze() {
+            niewejsc();
+        }
+
+
+function niewejsc(){
+    dodajCzas(20);
+    aktualizujStanGry;
+    obraz.src='decatlon.jfif';
+    tekst2.innerText='Błonie';
+    tekst1.innerText='Chcesz iść na siłownie?';
+    btnContainer.innerHTML = '<button onclick="silownia()">Tak</button><button onclick="galeria()">Nie</button>';
+
+  
+
+
+}
+function silownia(){
+    dodajCzas(10);
+    aktualizujStanGry;
+    obraz.src='siłownia.jpg';
+    tekst2.innerText='Siłownia';
+    tekst1.innerText='Robisz biceps czy nogi?';
+    btnContainer.innerHTML = '<button onclick="biceps()">Biceps</button><button onclick="nogi()">Nogi</button>';
+}
+function biceps(){
+    btnContainer.style.display='none';
+    dodajCzas(20);
+    aktualizujStanGry;
+    obraz.src='biceps.jpg';
+    tekst2.innerText='Siłownia';
+    tekst1.innerText='O nie!! Umięśniony kolega zajął Ci sprzęt!! Musisz zrobić nogi!!';
+    setTimeout(function(){
+        nogi();
+    },2000)
+}
+
+function nogi(){
+    dodajCzas(20);
+    aktualizujStanGry;
+    btnContainer.style.display='none';
+    obraz.src='panienogi.jpg';
+    tekst2.innerText='Siłownia';
+    tekst1.innerText='O nie!! Panie z fitnessu zajęły ci ławeczki!!';
+    setTimeout(function(){
+        dodajCzas(20);
+        aktualizujStanGry;
+        obraz.src='nogi.jpg';
+        tekst2.innerText='Siłownia';
+        if(mezczyznaInput.checked){
+        tekst1.innerText='Zalazłeś wolną maszyne do nóg! Miłego treningu!';}
+        else{
+            tekst1.innerText='Zalazłaś wolną maszyne do nóg! Miłego treningu!';
+        }
+
+        setTimeout(function(){
+            dodajZdrowie(5);
+            dodajCzas(40);
+            aktualizujStanGry;
+            obraz.src='urodziny.jfif';
+            tekst2.innerText='Siłownia';
+        if(mezczyznaInput.checked){
+        tekst1.innerText='Po treningu zrobiłeś się głodny, zauważyłeś, że Xtreme Kids ktoś ma urodziny, ryzykujesz i podkradasz troche jedzenia?';}
+        else{
+            tekst1.innerText='Po treningu zrobiłeś się głodny, zauważyłeś, że Xtreme Kids ktoś ma urodziny, ryzykujesz i podkradasz troche jedzenia?';
+        }
+
+        btnContainer.style.display='flex';
+
+        btnContainer.innerHTML = '<button onclick="podkradnij()">Tak</button><button onclick="niepodkradaj()">Nie</button>';
+
+
+        },4000)
+    },3500)
+
+}
+
+function podkradnij(){
+btnContainer.style.display='none';
+    var losowaLiczba = Math.random();
+
+if (losowaLiczba < 0.5) {
+    dodajCzas(20);
+    dodajglod(30);
+    aktualizujStanGry();
+    obraz.src = 'pudziantak.jpg';
+    tekst1.innerText = 'Okazało się, że solenizantką jest córka Pudziana! Pudzian tylko pokiwał palcem i pozwolił ci ukraść jedzenie ';
+} else {
+    dodajCzas(20);
+    dodajZdrowie(-20);
+    aktualizujStanGry();
+    obraz.src = 'pudziannie.png';
+    tekst1.innerText = 'Okazało się, że solenizantką jest córka Pudziana! Pudzian się zdenerwował i nie pozwolił ukraść jedzenia! ';
+}
+setTimeout(function(){
+    dodajCzas(20);
+    aktualizujStanGry();
+    niepodkradaj();
+},4000)
+
+}
+function niepodkradaj(){
+    
+    btnContainer.style.display='none';
+    obraz.src='decatlon.jfif';
+            tekst2.innerText='Błonie';
+        if(mezczyznaInput.checked){
+        tekst1.innerText='Wyszłeś z siłowni i kierujesz się w stronę galerii';}
+        else{
+            tekst1.innerText='Wyszłaś z siłowni i kierujesz się w stronę galerii';
+        }
+
+
+        setTimeout(function(){
+            dodajCzas(20);
+    aktualizujStanGry();
+            galeria();
+        },4000)
+}
+function galeria(){
+    dodajCzas(50);
+    aktualizujStanGry();
+    btnContainer.style.display='none';
+    obraz.src='gemini.jpg';
+            tekst2.innerText='Galeria Gemini';
+            tekst1.innerText='Jesteś już pod galeria';
+    setTimeout(function(){
+        obraz.src='patusiary.jpg';
+            tekst2.innerText='Galeria Gemini';
+            tekst1.innerText='Podchodzą do ciebie takie istoty i proszą o numer co robisz??';
+            btnContainer.innerHTML = '<button onclick="ucieknij()">Uciekam</button><button onclick="podajnumer()">Podaję numer</button>';
+    
+            btnContainer.style.display='flex';
+    
+        },4000)
+
+
+}
+
+function podajnumer(){
+    btn.btnContainer.style.display='none';
+    obraz.src='czarne.jpg';
+    tekst2.innerText='...';
+            tekst1.innerText='Jedna z nich miała chłopaka lat 30 (na testosteronie), który Cię pobił...';
+            setTimeout(function(){
+              przegrales();  
+            },3000)
+            
+
+}
+
+function ucieknij(){
+    btnContainer.style.display='none';
+    obraz.src='jedzenie.jpg';
+    tekst2.innerText='Gemini';
+            tekst1.innerText='Chcesz wejść do sklepu?';
+
+
+    btnContainer.innerHTML = '<button onclick="wejsc2()">Tak</button><button onclick="niewejsc2()">nie</button>';
+    btnContainer.style.display = 'flex';
+
+
+
+}
+
+
+
+function wejsc2(){
+    btnContainer.style.display='none';
+    dodajCzas(15);
+    aktualizujStanGry();
+    obraz.src = "sklep.png";
+    tekst2.innerText = "Sklep";
+    tekst1.innerText = "Zastanów się co chcesz kupić."
+    
+    btnContainer.innerHTML='<button onclick="hotdog()">hot dog 20 zł</button><button onclick="chleb()">chleb 5 zł</button><button onclick="sokJablkowy()">sok jabłkowy 9 zł</button><button onclick="spaghetti()">spaghetti 50 zł</button> <button onclick="zelki()">zelki 14 zł</button></br><button onclick="banany()">banany 10 zł</button> <button onclick="energetyk()">energetyk 19 zł</button> <button onclick="hamburger()">hamburger 52 zł</button> <button onclick="bubbletea()">bubble tea 37 zł</button></br><button onclick="niewejsc2()">wychodze</button>';
+    btnContainer.style.display='flex';
+    
+}
+
+
+
+function niewejsc2() {
+    btnContainer.style.display = 'none';
+    dodajCzas(20);
+    aktualizujStanGry();  
+    obraz.src = 'lody.jpg';
+    tekst2.innerText = 'Gemini';
+    tekst1.innerText = 'Niesamowita galeria Tarnowska, tyle młodzieży...';
+
+    setTimeout(function () {
+        dodajCzas(20);
+        aktualizujStanGry(); 
+        obraz.src = 'lodydym.jpg';
+        tekst2.innerText = 'Gemini';
+        if(mezczyznaInput.checked)
+        {
+            tekst1.innerText = 'O nie! To ci ludzie, których spotkałeś rano!';
+        } else {
+            tekst1.innerText = 'O nie! To ci ludzie, których spotkałaś rano!';
+        }
+
+        setTimeout(function () {
+            tekst1.innerHTML = '<span class="white">OOO HEJ </span>';
+            setTimeout(function () {
+                dodajCzas(5);
+                aktualizujStanGry();
+                var przywitanie = document.createElement('div');
+                przywitanie.style.color = 'green';
+                przywitanie.style.textAlign = 'right';
+                przywitanie.style.fontWeight = 'bold';
+                przywitanie.style.marginRight = '40%';
+                przywitanie.textContent = 'no hejka, próbuję dostać się na rynek';
+                tekst1.appendChild(przywitanie);
+                
+                setTimeout(function () {
+                    dodajCzas(5);
+                    aktualizujStanGry();
+                    if (x == 1) {
+                        var przedstawienie = document.createElement('div');
+                        przedstawienie.innerHTML = '<span class="white">To jest ' + y + ', ' + y + ' to jest Dawid, Dawid może cię podwieźć</span>';
+                        przedstawienie.style.fontWeight = 'bold';
+                        przedstawienie.style.textAlign = 'center';
+                        tekst1.appendChild(przedstawienie);
+                    } else {
+                        var przedstawienie = document.createElement('div');
+                        przedstawienie.innerHTML = '<span class="white">To jest ' + nickValue + ', ' + nickValue + ' to jest Dawid, Dawid może cię podwieźć</span>';
+                        przedstawienie.style.fontWeight = 'bold';
+                        przedstawienie.style.textAlign = 'center';
+                        tekst1.appendChild(przedstawienie);
+                    }
+
+                    setTimeout(function () {
+                        dodajCzas(5);
+                        aktualizujStanGry();
+                        var zgoda = document.createElement('div');
+                        zgoda.style.color = 'green';
+                        zgoda.style.textAlign = 'right';
+                        zgoda.style.fontWeight = 'bold';
+                        zgoda.style.marginRight = '40%';
+                        zgoda.textContent = 'Kurcze byłoby miło, dziękuję!';
+                        tekst1.appendChild(zgoda);
+                            setTimeout(function(){
+                                dawid();
+                            },3000)
+                        
+                    }, 5000);
+
+                }, 5000);
+
+            }, 5000);
+
+        }, 5000);
+
+    }, 4000);
+}
+
+
+
+    
+function dawid(){
+
+dodajCzas(60);
+    
+   aktualizujStanGry();
+    obraz.src = "burek.jpg";
+    tekst2.innerText = "Burek";
+    if (mezczyznaInput.checked) {
+        tekst1.innerText = "Gratulacje dotarłeś na burek, rynek jest tuż za tobą!";
+    } else {
+        tekst1.innerText = "Gratulacje dotarłaś na burek, rynek jest tuż za tobą!";
+    }
+    
+
+    setTimeout(function(){
+        sklepburek();
+    },3000)
+
+
+}
+
+
+function sklepburek(){
+    obraz.src = "sklepburek.jpg";
+    tekst2.innerText = "Burek";
+    tekst1.innerText = "Chcesz kupić owoce na burku?";
+
+    btnContainer.innerHTML = '<button onclick="wejsc3()">Tak</button><button onclick="niewejsc3()">nie</button>';
+    btnContainer.style.display = 'flex';
+
+
+}
+
+
+
+
+function wejsc3(){
+    btnContainer.style.display='none';
+    dodajCzas(15);
+    aktualizujStanGry();
+    obraz.src = "burekowoce.jpg";
+    tekst2.innerText = "Burek";
+    tekst1.innerText = "Zastanów się co chcesz kupić."
+    
+    btnContainer.innerHTML='<button onclick="banany()">banany 6 zł</button><button onclick="winogrono()">winogrono 5 zł</button><button onclick="jablko()">jabłko 2 zł</button><button onclick="marchewki()">marchewki 5 zł</button> <button onclick="maliny()">maliny 4 zł</button><button onclick="niewejsc3()">wychodze</button>';
+    btnContainer.style.display='flex';
+    
+}
+
+function banany() {
+            dodajCzas(15);
+            dodajPieniadze(-6);
+            dodajglod(20);
+            dodajZdrowie(5);
+            aktualizujStanGry();
+        }
+
+        function winogrono() {
+            dodajCzas(15);
+            dodajPieniadze(-5);
+            dodajglod(13);
+            dodajZdrowie(2);
+            aktualizujStanGry();
+        }
+
+        function jablko() {
+            dodajCzas(5);
+            dodajPieniadze(-2);
+            dodajglod(11);
+            dodajZdrowie(4);
+            aktualizujStanGry();
+        }
+
+        function marchewki() {
+            dodajCzas(30);
+            dodajPieniadze(-5);
+            dodajglod(20);
+            dodajZdrowie(15);
+            aktualizujStanGry();
+        }
+
+        function maliny() {
+            dodajCzas(6);
+            dodajPieniadze(-4);
+            dodajglod(9);
+            dodajZdrowie(10);
+            aktualizujStanGry();
+        }
+
+        
+
+
+        function niewejsc3() {
+    btnContainer.style.display = 'none';
+    dodajCzas(20);
+    aktualizujStanGry();   
+obraz.src='rynek.jpg';
+tekst2.innerText = "Rynek";
+if(mezczyznaInput.checked)
+{
+tekst1.innerText = "Udało się!! Dotarłeś na rynek!!";
+}
+else{
+    tekst1.innerText = "Udało się!! Dotarłaś na rynek!!";
+}
+
+
+setTimeout(function(){
+
+    dodajCzas(20);
+    aktualizujStanGry();  
+
+    obraz.src='kaziuwielki.jpg';
+tekst2.innerText = "Plac Kazimierza Wielkiego";
+if(mezczyznaInput.checked)
+{
+tekst1.innerText = "Już prawie jesteś! Dotarłeś na Plac Kazimierza!!";
+}
+else{
+    tekst1.innerText = "Już prawie jesteś! Dotarłaś na Plac Kazimierza!!";
+}
+
+
+
+
+setTimeout(function(){
+
+dodajCzas(20);
+aktualizujStanGry();  
+
+obraz.src='debata.jpg';
+tekst2.innerText = "Alegoria";
+if(mezczyznaInput.checked)
+{
+tekst1.innerText = "Zdążyłeś na debatę!";
+}
+else{
+tekst1.innerText = "Zdążyłaś na debatę!";
+}
+
+setTimeout(function(){
+
+dodajCzas(80);
+aktualizujStanGry();  
+
+obraz.src='walowa.jpg';
+tekst2.innerText = "Wałowa";
+tekst1.innerText = "Po skończonej debacie, idziesz coś przekąsić do McDonalda.";
+
+setTimeout(function(){
+
+dodajCzas(40);
+aktualizujStanGry();  
+
+obraz.src='McDonalld.jpg';
+tekst2.innerText = "McDonald";
+tekst1.innerText = "Mmm... Jak cudownie pachnie, ale chwila, co to?";
+
+setTimeout(function(){
+
+dodajCzas(40);
+aktualizujStanGry();  
+
+obraz.src='zsme.jpg';
+tekst2.innerText = "ZSME";
+tekst1.innerText = " Nie. ";
+
+btnContainer.style.display='flex';
+btnContainer.innerHTML='<button onclick="dworzec()">Wróć na dworzec</button>';
+
+
+
+
+},4000)
+
+
+
+},4000)
+
+
+
+},4000)
+
+
+},4000)
+
+
+},4000)
+
+
+}
+
+
+
+function dworzec(){
+    dodajCzas(40);
+aktualizujStanGry();  
+btnContainer.style.display='none';
+obraz.src='dworzec.jfif';
+tekst2.innerText = "Dworzec";
+if(mezczyznaInput.checked){
+tekst1.innerText = " Dotarłeś na dworzec! ";}
+else{
+    tekst1.innerText = " Dotarłaś na dworzec! ";
+}
+
+
+setTimeout(function(){
+    
+
+wygrales();
+
+},3000)
+}
+
+function wyborAutobusuA27() {
+    btnContainer.style.display='none';
+    dodajCzas(40);
+    dodajPieniadze(-7);
+    aktualizujStanGry();
+    obraz.src = "zawada.png";
+    tekst2.innerText = "Zawada";
+    if (mezczyznaInput.checked) {
+        tekst1.innerText = "O nie! Nie trafiłeś!";
+    } else {
+        tekst1.innerText = "O nie! Nie trafiłaś!";
+    }
+    setTimeout(function(){
+        tekst1.innerText="Musisz teraz wrócić spowrotem do Tarnowa";
+        btnContainer.innerHTML = '<button onclick="autobus()">Powrót</button>';
+        btnContainer.style.display='flex';
+
+
+    },4000)
+}
+function autobus(){
+    dodajCzas(40);
+    dodajPieniadze(-7);
+    aktualizujStanGry();
+    obraz.src = "przystanek.jpg";
+    tekst2.innerText = "Przystanek";
+    tekst1.innerText = "Chcesz dojechać na RYNEK (bez konieczności daleko dochodzić), w jaki autobus wsiadasz?";
+
+    btnContainer.innerHTML = '<button onclick="wyborAutobusu33()">33</button><button onclick="wyborAutobusu33()">14</button><button onclick="wyborAutobusuA27()">A27</button><button onclick="wyborAutobusu9()">9</button>';
+
+    btnContainer.style.display = 'flex';
+
+}
+function wyborAutobusu9() {
+    btnContainer.style.display = 'none';
+
+    tekst1.innerText="O nie! Przypadkiem wsiadłeś do złego autobusu!";
+    setTimeout(function(){
+        dodajCzas(40);
+    dodajPieniadze(-3);
+   aktualizujStanGry();
+
+   obraz.src = "krzyż.jpg";
+    tekst2.innerText = "Krzyż";
+    tekst1.innerText = "Wsiadłes w autobus nr 6, następny autobus dopiero za 1,5 h!";
+
+    setTimeout(function(){
+        dodajCzas(40);
+    
+   aktualizujStanGry();
+
+   obraz.src = "afewmoments.jpg";
+   tekst2.innerText = " ";
+    tekst1.innerText = " ";
+    
+    setTimeout(function(){
+        dodajCzas(5);
+    
+   aktualizujStanGry();
+
+  
+   obraz.src = "krzyżbabcia.jpg";
+   tekst2.innerText = "Bitwa z bossem!";
+    tekst1.innerText = "DOPADŁA CIE BABCIA, BOSS KRZYŻA!";
+    btnContainer.innerHTML = '<button onclick="atakujBabcie()">Atakuj</button><button onclick="unikajBabci()">Unik</button><button onclick="ukryjSie()">Ukryj się w domu obok</button>';
+    btnContainer.style.display = 'flex';
+
+    },3000)
+    
+    },4000)
+    },3500)}
+
+    function burek(){
+    dodajCzas(60);
+    dodajPieniadze(-3);
+   aktualizujStanGry();
+    obraz.src = "burek.jpg";
+    tekst2.innerText = "Burek";
+    if (mezczyznaInput.checked) {
+        tekst1.innerText = "Gratulacje dotarłeś na burek, rynek jest tuż za tobą!";
+    } else {
+        tekst1.innerText = "Gratulacje dotarłaś na burek, rynek jest tuż za tobą!";
+    }
+
+    setTimeout(function(){
+        sklepburek();
+    },3000)
+
+
+}        
+function tak(){
+    btnContainer.style.display = 'none';
+            obraz.src = 'policja.gif';
+            tekst1.innerText = '...';
+            tekst2.innerText = '...';
+            
+
+            setTimeout(function () {
+                obraz.src = 'wiezienie.jpg';
+                if (mezczyznaInput.checked) {
+                    tekst2.innerText = 'PRZEGRAŁEŚ';
+                    tekst1.innerText = 'Zostałeś zatrzymany przez policje!';
+                } else {
+                    tekst2.innerText = 'PRZEGRAŁAŚ';
+                    tekst1.innerText = 'Zostałaś zatrzymany przez policje!';
+                }
+
+
+                btnContainer.innerHTML = '<button onclick=\"pokazObraz()\">Spróbuj jeszcze raz</button>';
+                btnContainer.style.display = 'flex'; // Pokaż przycisk dalej
+            }, 4000);
+
+}
+var licz=0;
+
+function atakujBabcie() {
+    var sukces = Math.random() < 0.7; 
+    
+    if (sukces) {
+        tekst1.innerText = "Zadajesz obrażenia babci!";
+        
+        dodajZdrowie(-5);
+        aktualizujStanGry(); 
+        console.log(licz);
+        console.log(statystyki.zdrowie);
+        licz++;
+    } else {
+        tekst1.innerText = "O nie! Babcia zadaje ci obrażenia. Tracisz zdrowie!";
+        dodajZdrowie(-20);
+        
+        aktualizujStanGry();
+        console.log(statystyki.zdrowie); 
+        console.log(licz);
+    }
+
+    if (licz==5)
+    {
+        wygranaa();
+    }
+    
+}
+function wygrana()
+{
+obraz.src="krzyż.jpg"
+tekst2.innerText = "Krzyż";
+if(mezczyznaInput.checked){
+tekst1.innerText = "Zacząłeś tańczyć z babcią i puściła cię wolno!";}
+else{
+    tekst1.innerText = "Zaczęłaś tańczyć z babcią i puściła cię wolno!";
+}
+setTimeout(function(){
+
+    tekst1.innerText = "Już za chwilkę wsiądziesz w autobus";
+dodajCzas(30);
+aktualizujStanGry();
+    setTimeout(function() {
+        burek();
+    },2000)
+    
+},2000)
+}
+
+function wygranaa()
+{
+btnContainer.style.display='none';
+obraz.src="krzyż.jpg"
+tekst2.innerText = "Krzyż";
+if(mezczyznaInput.checked){
+tekst1.innerText = "Pokonałeś babcie!";}
+else{
+    tekst1.innerText = "Pokonałeś babcie!";
+}
+setTimeout(function(){
+
+    tekst1.innerText = "Już za chwilkę wsiądziesz w autobus";
+dodajCzas(30);
+aktualizujStanGry();
+    setTimeout(function() {
+        burek();
+    },2000)
+    
+},2000)
+}
+
+function unikajBabci() {
+    var sukces = Math.random() < 0.5; 
+
+    if (sukces) {
+        tekst1.innerText = "Udaje ci się uniknąć ataku babci!";
+        
+        aktualizujStanGry();
+    } else {
+        tekst1.innerText = "O nie! Nie udało ci się uniknąć ataku babci. Tracisz zdrowie!";
+        dodajZdrowie(-20);
+        aktualizujStanGry(); 
+    }}
+
+
+
+
+
+function ukryjSie() {
+    tekst1.innerText = "Ukrywasz się w domu obok. Babcia cię nie widzi.";
+    btnContainer.style.display = 'none';
+            obraz.src = 'czarne.jpg';
+        setTimeout(function(){
+            tekst1.innerText ="zaczynasz się rozglądać po domu...";
+            setTimeout(function(){
+            
+            obraz.src = 'babcia.gif';
+            dodajCzas(5);
+            dodajZdrowie(10);
+            aktualizujStanGry(); 
+            btnContainer.style.display = 'none';
+            setTimeout(function(){
+                wygrana();
+            },9000)
+        },1500)
+        },1500)
+    
+}
+
+
+
+function nie(){
+    btnContainer.style.display = 'none';
+            obraz.src = 'czarne.jpg';
+            tekst1.innerText = 'Patomłodzież za odmówienie zakupu alkoholu cię pobiła ';
+            tekst2.innerText = '...';
+
+
+            setTimeout(function () {
+                dodajZdrowie(-100);
+                    aktualizujStanGry();
+               
+            }, 4000);
+
+        }
+
+
+
+        function przyciskUnia() {
+            
+            btnContainer.style.display = 'none';
+            obraz.src = 'czarne.jpg';
+            tekst1.innerText = 'Planty to tereny Tarnovi, zostałeś pobity przez kibola';
+            tekst2.innerText = '...';
+
+
+            setTimeout(function () {
+               
+                dodajZdrowie(-100);
+                    aktualizujStanGry();
+
+                
+            }, 4000);
+
+        }
+
+        function wiekf() {
+            var wiekInput = document.getElementById('wiek');
+            var wiekValue = document.getElementById('wiekValue');
+            var wiekImage = document.getElementById('wiekImage');
+            var wiek = wiekInput.value;
+
+            wiekValue.innerText = wiek;
+
+            if (wiek <= 10) {
+                wiekImage.src = 'baby.png';
+            } else if (wiek <= 20) {
+                wiekImage.src = 'ziomeczek.png';
+            } else if (wiek <= 50) {
+                wiekImage.src = 'dinozaur.png';
+            } else {
+                wiekImage.src = 'smierc.png';
+            }
+        }
+
+        function wygrales(){
+            obraz.src = 'gratulacje.gif';
+            btnContainer.style.display = 'none';
+            document.getElementById('statystykiContainer').style.display = 'none';
+            tekst2.innerText = 'GRATULACJE!';
+            if (mezczyznaInput.checked) {
+                    
+                    tekst1.innerText = 'Przeżyłeś w Tarnowie , co za wyczyn!';
+                } else {
+                    
+                    tekst1.innerText = 'Przeżyłaś w Tarnowie 14h, co za wyczyn!';
+                }
+        }
+
+
+        function przegrales(){
+            obraz.src = 'czarne.jpg';
+            btnContainer.style.display = 'none';
+            document.getElementById('statystykiContainer').style.display = 'none';
+            tekst2.innerText = 'PRZEGRAŁEŚ';
+            tekst1.innerText = 'Skończyło ci się zdrowie!';
+            btnContainer.innerHTML = '<button onclick=\"pokazObraz()\">Spróbuj jeszcze raz</button>';
+            btnContainer.style.display = 'flex';
+        
+        }
+        function przegralesk(){
+            obraz.src = 'czarne.jpg';
+            btnContainer.style.display = 'none';
+            document.getElementById('statystykiContainer').style.display = 'none';
+            tekst2.innerText = 'PRZEGRAŁEŚ';
+            tekst1.innerText = 'Popadłeś w długi!!';
+            btnContainer.innerHTML = '<button onclick=\"pokazObraz()\">Spróbuj jeszcze raz</button>';
+            btnContainer.style.display = 'flex';
+        
+        }
+    </script>
+</body>
+
+</html>
